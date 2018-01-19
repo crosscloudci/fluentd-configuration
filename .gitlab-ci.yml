@@ -29,7 +29,7 @@ container:
   stage: Package
   image: docker:latest
   dependencies: 
-    - build
+    - compile
   script:
     - apk update && apk add curl jq git
     - git clone https://github.com/denverwilliams/fluentd-docker-image.git ./fluentd
