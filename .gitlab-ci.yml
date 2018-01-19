@@ -33,8 +33,8 @@ container:
   script:
     - apk update && apk add curl jq git
     - git clone https://github.com/denverwilliams/fluentd-docker-image.git -b cross-cloud ./fluentd
-    - sleep 10000000
-    # - cd ./fluentd/v0.14/debian ; docker build -t "$CI_REGISTRY_IMAGE:CI_COMMIT_SHA" --no-cache . ; cd - 
+    - cp -a ./vendor ./fluentd/v1.0/alpine/ ; cp ./fluent*.gem ./fluentd/v1.0/alpine/fluent.gem ; cp ./Gemfile ./fluentd/v1.0/alpine/Gemfile ; cp ./Gemfile.lock ./fluentd/v1.0/alpine/Gemfile.lock
+    - cd ./fluentd ; make image IMAGE_NAME="$CI_REGISTRY_IMAGE" DOCKERFILE=v1.0/alpine VERSION="$CI_COMMIT_SHA" ; cd -
     - echo export IMAGE=$CI_REGISTRY_IMAGE | tee release.env
     - echo export TAG=$CI_COMMIT_SHA | tee -a release.env
     - cat release.env
