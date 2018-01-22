@@ -35,7 +35,9 @@ container:
     - git clone https://github.com/denverwilliams/fluentd-docker-image.git -b cross-cloud ./fluentd
     - cp -a ./vendor ./fluentd/v1.0/alpine/ ; cp ./fluent*.gem ./fluentd/v1.0/alpine/fluent.gem ; cp ./Gemfile ./fluentd/v1.0/alpine/Gemfile ; cp ./Gemfile.lock ./fluentd/v1.0/alpine/Gemfile.lock
     - cd ./fluentd ; make image IMAGE_NAME="$CI_REGISTRY_IMAGE" DOCKERFILE=v1.0/alpine VERSION="$CI_COMMIT_SHA" ; cd -
-    - echo export IMAGE=$CI_REGISTRY_IMAGE | tee release.env
+    - git clone git@github.com:denverwilliams/fluentd-kubernetes-daemonset.git -b cross-cloud ./fluentd-daemonset
+    - cd ./fluentd-daemonset ; make image BASE_IMAGE="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/cloudwatch VERSION="$CI_COMMIT_SHA" ; cd -
+    - echo export IMAGE=$CI_REGISTRY_IMAGE/daemonset | tee release.env
     - echo export TAG=$CI_COMMIT_SHA | tee -a release.env
     - cat release.env
 
