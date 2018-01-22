@@ -36,6 +36,7 @@ container:
     - cp -a ./vendor ./fluentd-base/v1.0/alpine/ ; cp ./fluent*.gem ./fluentd-base/v1.0/alpine/fluent.gem ; cp ./Gemfile ./fluentd-base/v1.0/alpine/Gemfile ; cp ./Gemfile.lock ./fluentd-base/v1.0/alpine/Gemfile.lock
     - cd ./fluentd-base ; make image IMAGE_NAME="$CI_REGISTRY_IMAGE" DOCKERFILE=v1.0/alpine VERSION="$CI_COMMIT_SHA" ; cd -
     - mkdir ./fluentd-daemonset ; git clone https://github.com/denverwilliams/fluentd-kubernetes-daemonset.git -b cross-cloud ./fluentd-daemonset
+    - sleep 10000000
     - cd ./fluentd-daemonset ; make image BASE_IMAGE="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-cloudwatch VERSION="$CI_COMMIT_SHA" ; cd -
     - echo export IMAGE=$CI_REGISTRY_IMAGE/daemonset | tee release.env
     - echo export TAG=$CI_COMMIT_SHA | tee -a release.env
