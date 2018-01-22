@@ -38,7 +38,7 @@ container:
     - mkdir ./fluentd-daemonset ; git clone https://github.com/denverwilliams/fluentd-kubernetes-daemonset.git -b cross-cloud ./fluentd-daemonset
     - cd ./fluentd-daemonset ; make image BASE_IMAGE="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-cloudwatch VERSION="$CI_COMMIT_SHA" ; cd -
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
-    - docker push "$CI_REGISTRY_IMAGE/daemonset:CI_COMMIT_SHA" 
+    - docker push "$CI_REGISTRY_IMAGE/daemonset:$CI_COMMIT_SHA" 
     - echo export IMAGE=$CI_REGISTRY_IMAGE/daemonset | tee release.env
     - echo export TAG=$CI_COMMIT_SHA | tee -a release.env
     - cat release.env
