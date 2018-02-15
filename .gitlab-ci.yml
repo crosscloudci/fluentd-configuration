@@ -21,7 +21,7 @@ before_script:
     fi
   - >
     if ruby -v ; then
-        continue
+        echo 'Ruby found, not using rvm'
     else
        source /opt/local/etc/rvmrc
        source /opt/local/etc/profile.d/rvm.sh
