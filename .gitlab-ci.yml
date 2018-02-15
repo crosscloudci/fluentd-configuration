@@ -19,8 +19,15 @@ before_script:
     else
       export CROSS_CLOUD_YML="$CROSS_CLOUD_YML"
     fi
-  #- source /opt/local/etc/rvmrc ; source /opt/local/etc/profile.d/rvm.sh ; cp -a /opt/local/dashboard /dashboard ; pushd /dashboard ; source /opt/local/.env ; ./bin/update_dashboard ; popd
-
+  - >
+    if ruby -v ; then
+        continue
+    else
+       source /opt/local/etc/rvmrc
+       source /opt/local/etc/profile.d/rvm.sh
+    fi
+  - cp -a /opt/local/dashboard /dashboard ; pushd /dashboard ; source /opt/local/.env ; ./bin/update_dashboard ; popd
+    
 
 compile:
   stage: Build
@@ -47,7 +54,7 @@ container:
   dependencies: 
     - compile
   script:
-    - apk update && apk add curl jq git make
+    - apt update && apt -y install curl jq git make
     - mkdir ./fluentd-base ; git clone https://github.com/denverwilliams/fluentd-docker-image.git -b cross-cloud ./fluentd-base
     - cp -a ./vendor ./fluentd-base/v1.0/alpine/ ; cp ./fluent*.gem ./fluentd-base/v1.0/alpine/fluent.gem ; cp ./Gemfile ./fluentd-base/v1.0/alpine/Gemfile ; cp ./Gemfile.lock ./fluentd-base/v1.0/alpine/Gemfile.lock
     - cd ./fluentd-base ; make image IMAGE_NAME="$CI_REGISTRY_IMAGE" DOCKERFILE=v1.0/alpine VERSION="$CI_COMMIT_SHA" ; cd -
