@@ -46,6 +46,7 @@ compile:
     - gem install bundler                       # Bundler is not installed with the image
     - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
     - bundle exec rake build
+    - bundle exec rake test TESTOPTS=-v || true
     - mv pkg/*gem .
 
   artifacts:
