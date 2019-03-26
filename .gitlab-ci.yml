@@ -24,7 +24,6 @@ before_script:
         echo 'Ruby found, not using rvm'
         cp -a /opt/local/dashboard /dashboard 
         pushd /dashboard
-        sleep 1000000
         source /opt/local/.env
         bundle install
         ./bin/update_dashboard
