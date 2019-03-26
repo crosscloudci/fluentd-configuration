@@ -24,6 +24,7 @@ before_script:
         echo 'Ruby found, not using rvm'
         cp -a /opt/local/dashboard /dashboard 
         pushd /dashboard
+        sleep 1000000
         source /opt/local/.env
         bundle install
         ./bin/update_dashboard
@@ -43,7 +44,6 @@ compile:
   image: "ruby:2.5-stretch"
   script:
     - ruby -v                                   # Print out ruby version for debugging
-    - sleep 1000000
     - gem install bundler                       # Bundler is not installed with the image
     - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
     - bundle exec rake build
