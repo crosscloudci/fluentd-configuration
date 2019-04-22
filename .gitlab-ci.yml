@@ -40,7 +40,7 @@ before_script:
 
 compile:
   stage: Build
-  image: "arm64v8/ruby:2.6.3-alpine3.9"
+  image: "arm64v8/ruby:stretch"
   script:
     # Enable binfmt_misc 
     - docker run --privileged linuxkit/binfmt:v0.6
