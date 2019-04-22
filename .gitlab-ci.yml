@@ -43,7 +43,7 @@ compile:
   image: "arm64v8/ruby:stretch"
   script:
     # Enable binfmt_misc 
-    - docker run --privileged linuxkit/binfmt:v0.6
+    # - docker run --privileged linuxkit/binfmt:v0.6
     - ruby -v                                   # Print out ruby version for debugging
     - gem install bundler                       # Bundler is not installed with the image
     - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
