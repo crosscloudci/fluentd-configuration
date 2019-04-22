@@ -40,18 +40,15 @@ before_script:
 
 compile:
   stage: Build
-  image: "crosscloudci/debian-ruby-docker:latest"
+  image: "arm64v8/ruby:2.6.3-alpine3.9"
   script:
-    #Install qemu-arm
-    - apt update && apt -y install qemu-user qemu-user-static
     # Enable binfmt_misc 
     - docker run --privileged linuxkit/binfmt:v0.6
     - ruby -v                                   # Print out ruby version for debugging
     - gem install bundler                       # Bundler is not installed with the image
-    - sleep 100000
-    - qemu-arm-static bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
-    - qemu-arm-static bundle exec rake build
-    - qemu-arm-static bundle exec rake test TESTOPTS=-v || true
+    - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
+    - bundle exec rake build
+    - bundle exec rake test TESTOPTS=-v || true
     - mv pkg/*gem .
 
   artifacts:
