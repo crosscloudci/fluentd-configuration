@@ -48,6 +48,7 @@ compile:
     - docker run --privileged linuxkit/binfmt:v0.6
     - ruby -v                                   # Print out ruby version for debugging
     - gem install bundler                       # Bundler is not installed with the image
+    - sleep 100000
     - qemu-arm-static bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
     - qemu-arm-static bundle exec rake build
     - qemu-arm-static bundle exec rake test TESTOPTS=-v || true
