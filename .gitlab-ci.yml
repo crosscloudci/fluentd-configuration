@@ -44,6 +44,7 @@ compile:
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
+    - apt update && apt -y install qemu-user qemu-user-static
     - ruby -v                                   # Print out ruby version for debugging
     - gem install bundler                       # Bundler is not installed with the image
     - sed -i "19s/.*/  VERSION = '$CI_PIPELINE_ID.aarch64'/" lib/fluent/version.rb
