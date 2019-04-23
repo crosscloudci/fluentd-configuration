@@ -40,16 +40,19 @@ before_script:
 
 compile:
   stage: Build
-  image: "arm64v8/ruby:stretch"
+  image: "crosscloudci/debian-docker"
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
+    - docker run -v $(pwd):/fluentd -ti arm64v8/ruby:stretch /bin/bash
     - apt update && apt -y install qemu-user qemu-user-static
     - ruby -v                                   # Print out ruby version for debugging
+    - cd /fluentd
     - gem install bundler                       # Bundler is not installed with the image
     - sed -i "19s/.*/  VERSION = '$CI_PIPELINE_ID.aarch64'/" lib/fluent/version.rb
     - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
     - bundle exec rake build
+    - exit
     # - bundle exec rake test TESTOPTS=-v || true
     - mv pkg/*gem .
     - curl -F package=@fluentd-$CI_PIPELINE_ID.aarch64.gem https://$GEMFURY@push.fury.io/cncf/
