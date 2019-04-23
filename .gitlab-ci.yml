@@ -54,6 +54,7 @@ compile:
     - echo 'bundle exec rake build' >> fluentd.sh
     - cat fluentd.sh
     # - bundle exec rake test TESTOPTS=-v || true
+    - sleep 1000000
     - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
     - mv pkg/*gem .
     - curl -F package=@fluentd-$CI_PIPELINE_ID.aarch64.gem https://$GEMFURY@push.fury.io/cncf/
