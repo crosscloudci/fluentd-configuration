@@ -43,9 +43,10 @@ compile:
   image: "arm64v8/ruby:stretch"
   script:
     # Enable binfmt_misc 
-    # - docker run --privileged linuxkit/binfmt:v0.6
+    # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
     - ruby -v                                   # Print out ruby version for debugging
     - gem install bundler                       # Bundler is not installed with the image
+    - sed -i "19s/.*/  VERSION = '$CI_PIPELINE_ID.aarch64'/" lib/fluent/version.rb
     - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
     - bundle exec rake build
     - bundle exec rake test TESTOPTS=-v || true
