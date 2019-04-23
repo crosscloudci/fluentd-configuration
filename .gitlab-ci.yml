@@ -44,8 +44,8 @@ compile:
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
-    - >
-      cat <<EOF >> fluentd.sh
+    - |
+      cat > fluentd.sh << EOF
       #!/bin/bash
       apt update && apt -y install qemu-user qemu-user-static
       ruby -v                                   # Print out ruby version for debugging
@@ -55,6 +55,7 @@ compile:
       bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
       bundle exec rake build
       EOF
+    - cat fluentd.sh
     # - bundle exec rake test TESTOPTS=-v || true
     - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
     - mv pkg/*gem .
