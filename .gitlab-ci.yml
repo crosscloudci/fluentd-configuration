@@ -44,16 +44,18 @@ compile:
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
-    - docker run -v $(pwd):/fluentd -i arm64v8/ruby:stretch /bin/bash
-    - apt update && apt -y install qemu-user qemu-user-static
-    - ruby -v                                   # Print out ruby version for debugging
-    - cd /fluentd
-    - gem install bundler                       # Bundler is not installed with the image
-    - sed -i "19s/.*/  VERSION = '$CI_PIPELINE_ID.aarch64'/" lib/fluent/version.rb
-    - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
-    - bundle exec rake build
-    - exit
+    - cat <<EOF >> fluentd.sh
+      #!/bin/bash
+      apt update && apt -y install qemu-user qemu-user-static
+      ruby -v                                   # Print out ruby version for debugging
+      cd /fluentd
+      gem install bundler                       # Bundler is not installed with the image
+      sed -i "19s/.*/  VERSION = '$CI_PIPELINE_ID.aarch64'/" lib/fluent/version.rb
+      bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
+      bundle exec rake build
+      EOF
     # - bundle exec rake test TESTOPTS=-v || true
+    - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
     - mv pkg/*gem .
     - curl -F package=@fluentd-$CI_PIPELINE_ID.aarch64.gem https://$GEMFURY@push.fury.io/cncf/
 
