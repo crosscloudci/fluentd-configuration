@@ -44,7 +44,7 @@ compile:
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
-    - printf '!/bin/bash \napt update && apt -y install qemu-user qemu-user-static \n ruby -v \n cd /fluentd \n gem install bundler \n sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID.aarch64"/" lib/fluent/version.rb \n bundle install -j $(nproc) --path vendor \n bundle exec rake build' > fluentd.sh
+    - printf '!/bin/bash apt update && apt -y install qemu-user qemu-user-static ruby -v cd /fluentd gem install bundler sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID.aarch64"/" lib/fluent/version.rb bundle install -j $(nproc) --path vendor bundle exec rake build' > fluentd.sh
     - cat fluentd.sh
     # - bundle exec rake test TESTOPTS=-v || true
     - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
