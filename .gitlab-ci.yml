@@ -44,7 +44,7 @@ compile:
   script:
     # Enable binfmt_misc 
     # - docker run --privileged linuxkit/binfmt:v0.6 - Already enabled on host runner.
-    - docker run -v $(pwd):/fluentd -ti arm64v8/ruby:stretch /bin/bash
+    - docker run -v $(pwd):/fluentd -i arm64v8/ruby:stretch /bin/bash
     - apt update && apt -y install qemu-user qemu-user-static
     - ruby -v                                   # Print out ruby version for debugging
     - cd /fluentd
