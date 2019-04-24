@@ -52,6 +52,7 @@ compile:
     - echo 'sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID.aarch64"/" lib/fluent/version.rb' >> fluentd.sh
     - echo 'bundle install -j $(nproc) --path vendor' >> fluentd.sh
     - echo 'bundle exec rake build' >> fluentd.sh
+    - chmod +x fluentd.sh
     - cat fluentd.sh
     # - bundle exec rake test TESTOPTS=-v || true
     - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
