@@ -53,6 +53,7 @@ compile:
     - echo 'bundle install -j $(nproc) --path vendor' >> fluentd.sh
     - echo 'bundle exec rake build' >> fluentd.sh
     - cat fluentd.sh
+    - sleep 100000
     # - bundle exec rake test TESTOPTS=-v || true
     - ln -s $(pwd) /opt/local/fluentd-$CI_PIPELINE_ID
     - docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v /opt/local/fluentd-$CI_PIPELINE_ID:/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
