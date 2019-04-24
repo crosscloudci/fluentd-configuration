@@ -78,7 +78,7 @@ container:
     - apt update && apt -y install curl jq git make
     - git clone https://github.com/fluent/fluentd-docker-image.git
     - pushd fluentd-docker-image
-    - sed -i "25s|.*|&& gem install fluentd-aarch64 -v $CI_PIPELINE_ID --source https://$GEMFURY@gem.fury.io/cncf/ \|" v1.4/debian/Dockerfile
+    - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-aarch64 -v $CI_PIPELINE_ID --source https:\/\/$GEMFURY@gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$CI_COMMIT_SHA"
     - popd
     # - mkdir ./fluentd-daemonset ; git clone https://github.com/denverwilliams/fluentd-kubernetes-daemonset.git -b cross-cloud ./fluentd-daemonset
