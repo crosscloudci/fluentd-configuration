@@ -49,7 +49,7 @@ compile:
     - echo 'ruby -v' >> fluentd.sh
     - echo 'cd /fluentd' >> fluentd.sh
     - echo 'gem install bundler' >> fluentd.sh
-    - echo "sed -i \"4s|.*|  gem.name          = '\"fluentd-aarch64\"'|\" fluentd.gemspec" > fluentd.sh
+    - echo "sed -i \"4s|.*|  gem.name          = '\"fluentd-aarch64\"'|\" fluentd.gemspec" >> fluentd.sh
     - echo 'sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID"/" lib/fluent/version.rb' >> fluentd.sh
     - echo 'bundle install -j $(nproc) --path vendor' >> fluentd.sh
     - echo 'bundle exec rake build' >> fluentd.sh
