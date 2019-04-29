@@ -72,7 +72,7 @@ compile:
 container:
   stage: Package
   image: crosscloudci/debian-docker
-  dependencies:&
+  dependencies:
     - compile
   script:
     - apt update && apt -y install curl jq git make
