@@ -72,7 +72,7 @@ compile:
 container:
   stage: Package
   image: crosscloudci/debian-docker
-  dependencies: 
+  dependencies:&
     - compile
   script:
     - apt update && apt -y install curl jq git make
@@ -82,11 +82,14 @@ container:
     - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-aarch64 -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$CI_COMMIT_SHA"
     - popd
-    # - mkdir ./fluentd-daemonset ; git clone https://github.com/denverwilliams/fluentd-kubernetes-daemonset.git -b cross-cloud ./fluentd-daemonset
-    # - cd ./fluentd-daemonset ; make image BASE_IMAGE="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-cloudwatch VERSION="$CI_COMMIT_SHA" ; cd -
+    - git clone https://github.com/denverwilliams/fluentd-kubernetes-daemonset.git
+    - pushd fluentd-kubernetes-daemonset
+    - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA|" docker-image/v1.3/debian-cloudwatch/Dockerfile
+    - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v1.3/debian-cloudwatch VERSION="$CI_COMMIT_SHA"
+    - popd
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" 
-    # - docker push "$CI_REGISTRY_IMAGE/daemonset:$CI_COMMIT_SHA" 
+    - docker push "$CI_REGISTRY_IMAGE/daemonset:$CI_COMMIT_SHA" 
     - echo export IMAGE_ARGS=\"--set image=$CI_REGISTRY_IMAGE/daemonset\" | tee release.env
     - echo export TAG_ARGS=\"--set imageTag=$CI_COMMIT_SHA\" | tee -a release.env
     - cat release.env
