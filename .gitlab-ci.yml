@@ -80,7 +80,6 @@ container:
     - pushd fluentd-docker-image
     - sed -i "4s|.*|FROM arm64v8/ruby:stretch|" v1.4/debian/Dockerfile
     - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-aarch64 -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
-    - sleep 10000000
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$CI_COMMIT_SHA"
     - popd
     - git clone https://github.com/fluent/fluentd-kubernetes-daemonset.git
