@@ -61,6 +61,7 @@ compile:
         docker run -e CI_PIPELINE_ID=$CI_PIPELINE_ID -v $(pwd):/fluentd arm64v8/ruby:stretch /fluentd/fluentd.sh
       else
         echo 'Default to amd64 (Intel)'
+        export ARCH=amd64
         ruby -v
         gem install bundler
         bundle install -j $(nproc) --path vendor
@@ -94,6 +95,9 @@ container:
       if [ "$ARCH" == "arm64" ]; then
         echo 'ARCH set to arm64'
         sed -i "4s|.*|FROM arm64v8/ruby:stretch|" v1.4/debian/Dockerfile
+      else
+        echo 'Default to amd64 (Intel)'
+        export ARCH=amd64
       fi
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$IMAGE_TAG"
     - popd
