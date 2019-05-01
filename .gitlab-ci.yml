@@ -105,7 +105,7 @@ container:
     - popd
     - git clone https://github.com/fluent/fluentd-kubernetes-daemonset.git
     - pushd fluentd-kubernetes-daemonset
-    - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA|" docker-image/v1.3/debian-cloudwatch/Dockerfile
+    - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v1.3/debian-cloudwatch/Dockerfile
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v1.3/debian-cloudwatch VERSION="$IMAGE_TAG"
     - popd
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
