@@ -52,7 +52,7 @@ compile:
         echo 'ruby -v' >> fluentd.sh
         echo 'cd /fluentd' >> fluentd.sh
         echo 'gem install bundler' >> fluentd.sh
-        echo "sed -i \"4s|.*|  gem.name          = '\"fluentd-aarch64\"'|\" fluentd.gemspec" >> fluentd.sh
+        echo "sed -i \"4s|.*|  gem.name          = '\"fluentd-$ARCH\"'|\" fluentd.gemspec" >> fluentd.sh
         echo 'sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID"/" lib/fluent/version.rb' >> fluentd.sh
         echo 'bundle install -j $(nproc) --path vendor' >> fluentd.sh
         echo 'bundle exec rake build' >> fluentd.sh
@@ -62,6 +62,8 @@ compile:
       else
         echo 'Default to amd64 (Intel)'
         export ARCH=amd64
+        sed -i "4s|.*|  gem.name          = '"fluentd-$ARCH"'|" fluentd.gemspec
+        sed -i "19s/.*/  VERSION = $CI_PIPELINE_ID/" lib/fluent/version.rb
         ruby -v
         gem install bundler
         bundle install -j $(nproc) --path vendor
@@ -86,11 +88,9 @@ container:
   dependencies:
     - compile
   script:
-    - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - apt update && apt -y install curl jq git make
     - git clone https://github.com/fluent/fluentd-docker-image.git
     - pushd fluentd-docker-image
-    - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
     - >
       if [ "$ARCH" == "arm64" ]; then
         echo 'ARCH set to arm64'
@@ -99,6 +99,8 @@ container:
         echo 'Default to amd64 (Intel)'
         export ARCH=amd64
       fi
+    - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
+    - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
     - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$IMAGE_TAG"
     - popd
     - git clone https://github.com/fluent/fluentd-kubernetes-daemonset.git
