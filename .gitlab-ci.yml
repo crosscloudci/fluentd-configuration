@@ -111,7 +111,7 @@ container:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
     - docker push "$CI_REGISTRY_IMAGE/daemonset:$IMAGE_TAG" 
-    - echo export IMAGE_ARGS=\"--set image=$CI_REGISTRY_IMAGE/daemonset\" | tee release.env
+    - echo export IMAGE_ARGS=\"--set image=$CI_REGISTRY_IMAGE\" | tee release.env
     - echo export TAG_ARGS=\"--set imageTag=$IMAGE_TAG\" | tee -a release.env
     - cat release.env
 
