@@ -3,3 +3,6 @@ project:
   display_name: Fluentd
   sub_title: Logging
   project_url: "https://github.com/fluent/fluentd"
+  arch:
+    - "amd64"
+    - "arm64"   
