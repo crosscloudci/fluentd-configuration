@@ -68,7 +68,7 @@ compile:
         gem install bundler
         bundle install -j $(nproc) --path vendor
         bundle exec rake build
-        # bundle exec rake test TESTOPTS=-v || true
+        bundle exec rake test TESTOPTS=-v || true
       fi
     - mv pkg/*gem .
     - curl -F package=@fluentd-$ARCH-$CI_PIPELINE_ID.gem https://$GEMFURY@push.fury.io/cncf/
