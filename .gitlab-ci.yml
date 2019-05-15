@@ -94,19 +94,19 @@ container:
     - >
       if [ "$ARCH" == "arm64" ]; then
         echo 'ARCH set to arm64'
-        sed -i "4s|.*|FROM arm64v8/ruby:stretch|" v1.4/debian/Dockerfile
+        sed -i "4s|.*|FROM arm64v8/ruby:2.6.3-alpine3.9|" v1.4/alpine/Dockerfile
       else
         echo 'Default to amd64 (Intel)'
         export ARCH=amd64
       fi
     - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
-    - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/debian/Dockerfile
-    - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/debian:"$IMAGE_TAG"
+    - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/alpine/Dockerfile
+    - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/alpine:"$IMAGE_TAG"
     - popd
     - git clone https://github.com/fluent/fluentd-kubernetes-daemonset.git
     - pushd fluentd-kubernetes-daemonset
-    - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v1.3/debian-cloudwatch/Dockerfile
-    - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v1.3/debian-cloudwatch VERSION="$IMAGE_TAG"
+    - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v0.12/alpine-cloudwatch/Dockerfile
+    - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-cloudwatch VERSION="$IMAGE_TAG"
     - popd
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
