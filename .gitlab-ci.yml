@@ -50,7 +50,7 @@ compile-arm:
     - ruby -v
     - gem install bundler
     - sleep 1000000
-    - sed -i \"4s|.*|  gem.name          = '\"fluentd-$ARCH\"'|\" fluentd.gemspec
+    - sed -i "4s|.*|  gem.name          = \"fluentd-$ARCH\"|" fluentd.gemspec
     - sed -i "19s/.*/  VERSION = "$CI_PIPELINE_ID"/" lib/fluent/version.rb
     - bundle install -j $(nproc) --path vendor
     - bundle exec rake build
@@ -74,7 +74,7 @@ compile:
       - $ARCH == "amd64"
   script:
     - export ARCH=amd64
-    - sed -i "4s|.*|  gem.name          = '"fluentd-$ARCH"'|" fluentd.gemspec
+    - sed -i "4s|.*|  gem.name          = \"fluentd-$ARCH\"|" fluentd.gemspec
     - sed -i "19s/.*/  VERSION = $CI_PIPELINE_ID/" lib/fluent/version.rb
     - ruby -v
     - gem install bundler
