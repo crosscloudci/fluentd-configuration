@@ -39,6 +39,8 @@ before_script:
     fi
 
 compile-arm:
+  tags:
+    - arm
   stage: Build
   image: "arm64v8/ruby:stretch"
   only:
@@ -91,6 +93,8 @@ compile:
       - Gemfile.lock
 
 container-arm:
+  tags:
+    - arm
   stage: Package
   image: crosscloudci/debian-docker:arm64
   only:
