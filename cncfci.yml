@@ -5,4 +5,7 @@ project:
   project_url: "https://github.com/fluent/fluentd"
   arch:
     - "amd64"
-    - "arm64"   
+    - "arm64"  
+  stable_ref: "v1.5.1"
+  head_ref: "master"   
+ 
