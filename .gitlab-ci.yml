@@ -126,6 +126,7 @@ container-arm:
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
+    - popd
     - echo export IMAGE_ARGS=\"--set image.repository=$CI_REGISTRY_IMAGE\" | tee release.env
     - echo export TAG_ARGS=\"--set image.tag=$IMAGE_TAG\" | tee -a release.env
     - cat release.env
@@ -166,6 +167,7 @@ container:
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
+    - popd
     - echo export IMAGE_ARGS=\"--set image.repository=$CI_REGISTRY_IMAGE\" | tee release.env
     - echo export TAG_ARGS=\"--set image.tag=$IMAGE_TAG\" | tee -a release.env
     - cat release.env
