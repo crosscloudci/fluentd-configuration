@@ -116,6 +116,7 @@ container-arm:
     # - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v0.12/alpine-syslog/Dockerfile
     # - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-syslog VERSION="$IMAGE_TAG"
     # - popd
+    - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     - git checkout tags/v1.16.2 -b v1.16.2
@@ -148,7 +149,6 @@ container:
     # - apt update && apt -y install curl jq git make
     # - git clone https://github.com/fluent/fluentd-docker-image.git
     # - pushd fluentd-docker-image
-    # - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     # - sed -i s/"gem install fluentd -v 1.4.2"/"gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/alpine/Dockerfile
     # - make image IMAGE_NAME="$CI_REGISTRY_IMAGE" X86_IMAGES=v1.4/alpine:"$IMAGE_TAG"
     # - popd
@@ -157,6 +157,7 @@ container:
     # - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v0.12/alpine-syslog/Dockerfile
     # - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-syslog VERSION="$IMAGE_TAG"
     # - popd
+    - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     - git checkout tags/v1.16.2 -b v1.16.2
