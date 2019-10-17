@@ -79,7 +79,7 @@ compile:
     - gem install bundler
     - bundle install -j $(nproc) --path vendor
     - bundle exec rake build
-    - bundle exec rake test TESTOPTS=-v || true
+    # - bundle exec rake test TESTOPTS=-v || true
     - mv pkg/*gem .
     - curl -F package=@fluentd-$ARCH-$CI_PIPELINE_ID.gem https://$GEMFURY@push.fury.io/cncf/
 
@@ -120,8 +120,8 @@ container-arm:
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     - git checkout tags/v1.16.2 -b v1.16.2
     - sed -i s/"LD_PRELOAD=\/usr\/lib\/x86_64-linux-gnu\/libjemalloc.so.1"/"LD_PRELOAD=\/usr\/lib\/arm64-linux-gnu\/libjemalloc.so.1"/g ./Dockerfile
+    - sed -i s/"gem install --file Gemfile"/"gem install --file Gemfile && gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g ./Dockerfile
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
-    - sed -i s/"gem install --file Gemfile"/"gem install --file Gemfile && gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/alpine/Dockerfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
@@ -161,7 +161,7 @@ container:
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     - git checkout tags/v1.16.2 -b v1.16.2
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
-    - sed -i s/"gem install --file Gemfile"/"gem install --file Gemfile && gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g v1.4/alpine/Dockerfile
+    - sed -i s/"gem install --file Gemfile"/"gem install --file Gemfile && gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g ./Dockerfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
