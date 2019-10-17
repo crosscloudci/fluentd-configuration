@@ -163,6 +163,7 @@ container:
     - git checkout tags/v1.16.2 -b v1.16.2
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
     - sed -i s/"--file Gemfile"/"fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/ \&\& gem install --file Gemfile"/g ./Dockerfile
+    - sleep 100000
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
