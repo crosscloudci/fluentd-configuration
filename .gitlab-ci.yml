@@ -161,6 +161,7 @@ container:
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     - git checkout tags/v1.16.2 -b v1.16.2
+    - sleep 100000
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
     - sed -i s/"gem install --file Gemfile"/"gem install --file Gemfile && gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/"/g ./Dockerfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
