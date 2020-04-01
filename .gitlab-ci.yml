@@ -158,11 +158,10 @@ container:
     # - sed -i "4s|.*|FROM $CI_REGISTRY_IMAGE:$IMAGE_TAG|" docker-image/v0.12/alpine-syslog/Dockerfile
     # - make image IMAGE_NAME="$CI_REGISTRY_IMAGE/daemonset" DOCKERFILE=v0.12/alpine-syslog VERSION="$IMAGE_TAG"
     # - popd
-    - rvm use ruby-2.4.1
     - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
-    - git checkout tags/v1.16.2 -b v1.16.2
+    - git checkout master
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
     - sed -i s/"--file Gemfile"/"--file Gemfile \&\& gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/ --force"/g ./Dockerfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
