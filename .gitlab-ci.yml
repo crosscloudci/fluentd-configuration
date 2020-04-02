@@ -119,13 +119,14 @@ container-arm:
     - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
-    - git checkout tags/v1.16.2 -b v1.16.2
+    - git checkout master
     - sed -i s/"LD_PRELOAD=\/usr\/lib\/x86_64-linux-gnu\/libjemalloc.so.1"/"LD_PRELOAD=\/usr\/lib\/aarch64-linux-gnu\/libjemalloc.so.1"/g ./Dockerfile
     - sed -i s/"--file Gemfile"/"--file Gemfile \&\& gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/ --force"/g ./Dockerfile
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
+    - popd
     - echo export IMAGE_ARGS=\"--set image.repository=$CI_REGISTRY_IMAGE\" | tee release.env
     - echo export TAG_ARGS=\"--set image.tag=$IMAGE_TAG\" | tee -a release.env
     - cat release.env
@@ -160,12 +161,13 @@ container:
     - export IMAGE_TAG="${CI_COMMIT_REF_SLUG}.${CI_PIPELINE_ID}.${CI_COMMIT_SHA_SHORT}.${ARCH}"
     - git clone https://github.com/kubernetes/kubernetes.git
     - pushd ./kubernetes/cluster/addons/fluentd-elasticsearch/fluentd-es-image
-    - git checkout tags/v1.16.2 -b v1.16.2
+    - git checkout master
     - sed -i s/"gem 'fluentd'"/"#gem 'fluentd'"/g ./Gemfile
     - sed -i s/"--file Gemfile"/"--file Gemfile \&\& gem install fluentd-$ARCH -v $CI_PIPELINE_ID --source https:\/\/gem.fury.io\/cncf\/ --force"/g ./Dockerfile
     - docker build -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG" 
+    - popd
     - echo export IMAGE_ARGS=\"--set image.repository=$CI_REGISTRY_IMAGE\" | tee release.env
     - echo export TAG_ARGS=\"--set image.tag=$IMAGE_TAG\" | tee -a release.env
     - cat release.env
