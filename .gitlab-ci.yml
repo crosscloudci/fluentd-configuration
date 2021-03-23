@@ -63,6 +63,7 @@ compile:
     variables:
       - $ARCH == "amd64"
   script:
+    - sleep 12000
     - export ARCH=amd64
     - sed -i "4s|.*|  gem.name          = \"fluentd-$ARCH\"|" fluentd.gemspec
     - sed -i "19s/.*/  VERSION = $CI_PIPELINE_ID/" lib/fluent/version.rb
