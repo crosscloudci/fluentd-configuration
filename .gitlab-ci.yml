@@ -12,12 +12,12 @@ before_script:
     fi
   - >
     if ruby -v; then
-        sleep 20000
         cp -a /opt/local/dashboard /dashboard
         pushd /dashboard
         /bin/bash -c "source /opt/local/.env"
         bundle install
         ./bin/update_dashboard
+        sleep 2000
         popd
     else
         source /opt/local/etc/rvmrc
