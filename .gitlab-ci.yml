@@ -8,7 +8,7 @@ before_script:
   - >
     if [ -z "$CROSS_CLOUD_YML" ] && [ -z "$DASHBOARD_API_HOST_PORT" ]; then
        export CROSS_CLOUD_YML="https://raw.githubusercontent.com/CrossCloudCI/cncf-configuration/master/cross-cloud.yml"
-       export DASHBOARD_API_HOST_PORT="devapi.cncf.ci"
+       export DASHBOARD_API_HOST_PORT="productionapi.cncf.ci"
     fi
   - >
     if ruby -v; then
