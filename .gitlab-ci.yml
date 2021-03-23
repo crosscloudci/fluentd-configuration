@@ -11,20 +11,20 @@ before_script:
        export DASHBOARD_API_HOST_PORT="devapi.cncf.ci"
     fi
   - >
-    if [ -f "/opt/local/etc/rvmrc" ] ; then
+    if ruby -v; then
+        sleep 20000
+        cp -a /opt/local/dashboard /dashboard
+        pushd /dashboard
+        /bin/bash -c "source /opt/local/.env"
+        bundle install
+        ./bin/update_dashboard
+        popd
+    else
         source /opt/local/etc/rvmrc
         source /opt/local/etc/profile.d/rvm.sh
         cp -a /opt/local/dashboard /dashboard
         pushd /dashboard
         /bin/bash -c "source /opt/local/.env"
-        ./bin/update_dashboard
-        popd
-    else
-        echo 'rvmrc not found, not using ruby'
-        cp -a /opt/local/dashboard /dashboard
-        pushd /dashboard
-        /bin/bash -c "source /opt/local/.env"
-        bundle install
         ./bin/update_dashboard
         popd
     fi
@@ -63,7 +63,6 @@ compile:
     variables:
       - $ARCH == "amd64"
   script:
-    - sleep 12000
     - export ARCH=amd64
     - sed -i "4s|.*|  gem.name          = \"fluentd-$ARCH\"|" fluentd.gemspec
     - sed -i "19s/.*/  VERSION = $CI_PIPELINE_ID/" lib/fluent/version.rb
