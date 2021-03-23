@@ -11,22 +11,22 @@ before_script:
        export DASHBOARD_API_HOST_PORT="devapi.cncf.ci"
     fi
   - >
-    if ruby -v ; then
-        echo 'Ruby found, not using rvm'
-        cp -a /opt/local/dashboard /dashboard 
+    if [ -f "/opt/local/etc/rvmrc" ] ; then
+        source /opt/local/etc/rvmrc
+        source /opt/local/etc/profile.d/rvm.sh
+        cp -a /opt/local/dashboard /dashboard
+        pushd /dashboard
+        /bin/bash -c "source /opt/local/.env"
+        ./bin/update_dashboard
+        popd
+    else
+        echo 'rvmrc not found, not using ruby'
+        cp -a /opt/local/dashboard /dashboard
         pushd /dashboard
         /bin/bash -c "source /opt/local/.env"
         bundle install
         ./bin/update_dashboard
         popd
-    else
-       source /opt/local/etc/rvmrc
-       source /opt/local/etc/profile.d/rvm.sh
-       cp -a /opt/local/dashboard /dashboard
-       pushd /dashboard
-       /bin/bash -c "source /opt/local/.env"
-       ./bin/update_dashboard
-       popd
     fi
 
 compile-arm:
