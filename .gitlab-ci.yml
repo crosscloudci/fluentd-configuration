@@ -20,12 +20,13 @@ before_script:
         ./bin/update_dashboard
         popd
     else
-        sleep 100000000
         source /opt/local/etc/rvmrc
         source /opt/local/etc/profile.d/rvm.sh
         cp -a /opt/local/dashboard /dashboard
         pushd /dashboard
         source /opt/local/.env
+        rvm use ruby-2.3.0
+        bundle install
         ./bin/update_dashboard
         popd
     fi
